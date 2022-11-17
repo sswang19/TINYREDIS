@@ -5,6 +5,7 @@
 #include <string.h>
 #include<string>
 #include <sys/epoll.h>
+#include"redis_parse.h"
 using namespace std;
 struct client_info {
     char client_ip[16];
@@ -84,7 +85,7 @@ int main()
                     continue;
                 }
                 // 有数据到达，需要通信
-                char buf[1024] = { 0 };
+                char *buf= { 0 };
                 int len = read(curfd, buf, sizeof(buf));
 
                 if (len == 0)
@@ -96,7 +97,7 @@ int main()
                 }
                 else
                 {
-                    printf("read buf = %s\n", buf);
+                    redis_parse  *p = new redis_parse(buf);
                     write(curfd, buf, strlen(buf) + 1);
                 }
             }
